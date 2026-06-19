@@ -1,0 +1,108 @@
+name: CI
+
+# Public-showcase CI. The full private CI also runs the pytest suite, the
+# architecture-layering + API-authz gates, and the tax-oracle (Gate 1) job —
+# all of which depend on the data layer (synthetic-population parquet + derived
+# artifacts) that is not part of this public repository. The jobs below are the
+# subset that runs without that data layer, so this workflow stays green on a
+# fresh clone.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Python: syntax gate + dependency audit (both data-independent).
+  # ---------------------------------------------------------------------------
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          # 3.11 is required: the codebase uses enum.StrEnum. Do not downgrade.
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            apps/api/requirements.txt
+            requirements-models.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-models.txt -r apps/api/requirements.txt
+          pip install "pip-audit==2.9.0"
+
+      - name: Syntax gate (compileall)
+        run: |
+          python -m compileall -q models shared scripts \
+            apps/api/users apps/api/profiles apps/api/paychecks \
+            apps/api/tracking apps/api/benefits
+
+      - name: Python dependency audit (pip-audit)
+        # The carved-out advisories require version bumps outside the stated
+        # dependency ranges; tracked separately.
+        run: |
+          pip-audit \
+            --ignore-vuln PYSEC-2026-113 \
+            --ignore-vuln PYSEC-2022-43012 \
+            --ignore-vuln PYSEC-2025-49 \
+            --ignore-vuln GHSA-cx63-2mw6-8hw5
+
+  # ---------------------------------------------------------------------------
+  # Web: lint, production build, npm audit.
+  # ---------------------------------------------------------------------------
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: npm audit (advisory report — non-blocking)
+        continue-on-error: true
+        run: npm audit --audit-level=high
+
+  # ---------------------------------------------------------------------------
+  # Secrets: full-history gitleaks scan.
+  # ---------------------------------------------------------------------------
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITLEAKS_CONFIG: .gitleaks.toml

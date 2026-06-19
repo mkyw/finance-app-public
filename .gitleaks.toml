@@ -1,0 +1,14 @@
+# gitleaks configuration for finance-app (consumed by the `secrets` CI job).
+#
+# Extends gitleaks' built-in ruleset. The only allowlisted value is the
+# obviously-fake dev-only placeholder SECRET_KEY in settings.py — in production
+# the real key is read from the environment (see apps/api/backend/settings.py).
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "dev-only placeholder SECRET_KEY; the real key is read from the environment."
+# Scope the exemption tightly: only the dev settings file, only this literal.
+paths = ['''apps/api/backend/settings\.py''']
+regexes = ['''django-insecure-dev-only-placeholder-set-SECRET_KEY-in-env''']

@@ -1,0 +1,30 @@
+# Deliberately-public DRF endpoints (consumed by scripts/ci/check_authz.py).
+#
+# Each non-comment line is the app-rooted dotted path of a class-based DRF view
+# whose `permission_classes` is intentionally empty (`[]`) — i.e. open to
+# unauthenticated callers. check_authz.py FAILS the build for any empty-permission
+# view that is NOT listed here, so this file is the single, reviewable record of
+# every public surface.
+#
+# ADDING A NEW PUBLIC ENDPOINT requires:
+#   1. an entry below (one dotted path per line), AND
+#   2. a justification comment explaining why it is safe to expose unauthenticated.
+# The `/new-endpoint` skill and the `authz` audit agent both reference this file;
+# do not bypass it by adding REST_FRAMEWORK defaults.
+#
+# ---------------------------------------------------------------------------
+# Current public endpoints — the onboarding flow is anonymous (pre-accounts).
+# Both are read-only-ish analysis endpoints that take a household profile in the
+# request body and return a computed result; they touch no per-user stored data
+# (there are no user accounts yet), so there is no cross-user data to isolate.
+# When the accounts/auth layer lands, re-evaluate whether these stay public.
+# ---------------------------------------------------------------------------
+
+# POST /api/profiles/analyze/ — runs the model chain on an anonymous household
+# profile supplied in the request body; returns the analysis payload. No stored
+# user data is read or written.
+profiles.views.ProfileAnalysisView
+
+# POST /api/profiles/resolve-city/ — name->PUMA resolver over the static
+# city_puma_map.json artifact; pure lookup, no user data.
+profiles.views.CityResolveView

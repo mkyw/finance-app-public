@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+/* Rotating text container (hero headline — primary text, so Georgia) */
+.rotating-text-container {
+  font-size: 28px;
+  font-family: Georgia, "Times New Roman", serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 60px;
+  overflow: hidden;
+}
+
+/* Static text (Start planning for) */
+.rotating-text-container .static-text {
+  white-space: nowrap;
+  display: inline-block;
+  font-weight: 500;
+}
+
+/* Rotating text wrapper */
+.rotating-text-wrapper {
+  position: relative;
+  display: inline-block;
+  min-width: 250px;
+  height: 40px;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Invisible sizer: the only in-flow content, so the wrapper's shrink-to-fit
+   width becomes the WIDEST phrase in the current font (no hard-coded width).
+   font-weight matches .rotating-text so the measured width is exact; height:0
+   keeps it from affecting the wrapper's fixed 40px height. */
+.rotating-text-sizer {
+  display: inline-block;
+  font-weight: 600;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+.rotating-text-sizer > span {
+  display: block;
+  white-space: nowrap;
+}
+
+/* Each rotating text is positioned absolutely for animation */
+.rotating-text {
+  position: absolute;
+  top: -0.05em;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  animation: smoothRotate 18s infinite ease-in-out;
+  white-space: nowrap;
+  display: inline-block;
+  text-align: left;
+  color: #deb887;
+  font-weight: 600;
+  transform: translateY(0);
+  animation-fill-mode: both;
+}
+
+/* Animation delay for each span to stagger the rotation */
+.rotating-text:nth-child(1) {
+  animation: smoothRotate 18s infinite ease-in-out;
+  animation-delay: 0s;
+  animation-fill-mode: both;
+}
+
+.rotating-text:nth-child(2) {
+  animation-delay: 3.6s;
+  animation-fill-mode: both;
+}
+
+.rotating-text:nth-child(3) {
+  animation-delay: 7.2s;
+  animation-fill-mode: both;
+}
+
+.rotating-text:nth-child(4) {
+  animation-delay: 10.8s;
+  animation-fill-mode: both;
+}
+
+.rotating-text:nth-child(5) {
+  animation-delay: 14.4s;
+  animation-fill-mode: both;
+}
+
+/* Smooth rotate animation with slide effect */
+@keyframes smoothRotate {
+
+  0% {
+    opacity: 0;
+    transform: translateY(0.3em);
+  }
+
+  5% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  20% {
+    opacity: 0;
+    transform: translateY(-0.3em);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-0.3em);
+  }
+}
+
+/* Plan loading view: precision spinner + staged-copy cross-fade */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.plan-phase-text {
+  animation: planPhaseIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes planPhaseIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Special animation for first item - starts visible, then follows normal pattern */
+@keyframes smoothRotateFirst {
+
+  0%,
+  16% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  18%,
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}

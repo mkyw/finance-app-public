@@ -1,0 +1,30 @@
+# EditorConfig — repo-wide whitespace baseline (https://editorconfig.org).
+# Anchors indentation/newline/whitespace so editors stop producing phantom
+# format-on-save churn (notably apps/web/src/app/page.tsx). Editor-agnostic and
+# version-controlled; it does NOT reformat existing files, only future saves.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Web (Next.js/React/TS) + JSON/CSS/MD — 2-space, matching the existing files.
+[*.{js,jsx,ts,tsx,mjs,cjs,json,css,scss,html,yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Python — 4-space (PEP 8).
+[*.py]
+indent_style = space
+indent_size = 4
+
+# R pipeline scripts — 2-space (tidyverse style).
+[*.{R,r}]
+indent_style = space
+indent_size = 2
+
+# Markdown — don't trim trailing whitespace (two-space line breaks are meaningful).
+[*.md]
+trim_trailing_whitespace = false

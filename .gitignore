@@ -1,0 +1,33 @@
+# Derived pipeline artifacts (regenerate via export_*.R)
+pipeline/artifacts/synthetic_population/
+pipeline/artifacts/puma_similarity/
+
+# Large source data
+pipeline/fusionData/survey-processed/**/*.parquet
+pipeline/fusionData/survey-processed/**/*.fst
+# SCF Summary Extract microdata (~22 MB, reproducible from the Fed download; see DATA_SOURCES.md #11)
+pipeline/export/backfill_calibration/*.csv
+# Vanguard How America Saves PDF (~5 MB, reproducible from the Vanguard public URL; see DATA_SOURCES.md #14)
+pipeline/export/committed_outflows/*.pdf
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# Django
+apps/api/db.sqlite3
+.env
+
+# R
+*.fsd
+*.rds
+*.Rhistory
+
+# OS
+.DS_Store
+
+# Node
+apps/web/.next/
+apps/web/node_modules/

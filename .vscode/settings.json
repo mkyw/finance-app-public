@@ -1,0 +1,14 @@
+{
+  // Stop the recurring phantom whitespace/reindentation churn on the large
+  // hand-formatted TSX component (apps/web/src/app/page.tsx) and other tsx files.
+  // There is no Prettier in this project, so the built-in TS formatter was
+  // reindenting multi-line JSX/ternaries on every save, producing diffs between
+  // turns. Disable format-on-save for TSX; the .editorconfig still enforces the
+  // whitespace baseline (indent size, trailing whitespace, final newline). Lint
+  // remains available via `npm run lint`. Resolves DECISIONS.md
+  // FORMATTER-CONFIG-FOR-PAGE-TSX-WHITESPACE.
+  "[typescriptreact]": {
+    "editor.formatOnSave": false
+  },
+  "editor.detectIndentation": true
+}
