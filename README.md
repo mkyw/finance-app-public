@@ -1,8 +1,8 @@
 # finance-app
 
-A personal-finance engine that turns a few household facts — age, income,
-location, housing tenure, household size — into a personalized picture of where
-the money goes: a category-by-category spending breakdown, a gross→take-home tax
+A household finance microsimulation engine that turns a few household facts —
+age, income, location, housing tenure, household size — into a personalized picture of
+where the money goes: a category-by-category spending breakdown, a gross→take-home tax
 wedge, a four-way split of every dollar (committed outflows, debt service,
 spending, savings), benefits eligibility screening, and a balance-sheet view.
 
@@ -12,6 +12,37 @@ spending, savings), benefits eligibility screening, and a balance-sheet view.
 > **not included here**, so the app is published for reading rather than for
 > turnkey local execution. The architecture below explains where that data layer
 > plugs in.
+
+## Website Flow
+<p align="center">
+  <img width="1440" height="900" alt="Landing Page" src="https://github.com/user-attachments/assets/69b38ebd-d4fe-41b3-81a6-042564796017" />
+  <br /><em>Landing Page</em>
+</p>
+
+<p align="center">
+  <img width="1440" height="900" alt="User Registration (1)" src="https://github.com/user-attachments/assets/3e4c43df-802e-4ee0-92eb-9641cab629e8" />
+  <br /><em>User Registration — Step 1</em>
+</p>
+
+<p align="center">
+  <img width="1440" height="900" alt="User Registration (2)" src="https://github.com/user-attachments/assets/b71d1a00-3b60-40eb-90b2-58d01a113393" />
+  <br /><em>User Registration — Step 2</em>
+</p>
+
+<p align="center">
+  <img width="1440" height="900" alt="Loading Screen" src="https://github.com/user-attachments/assets/c4adeb40-ee2e-4690-bfbd-1efc1a72c94e" />
+  <br /><em>Loading Screen</em>
+</p>
+
+<p align="center">
+  <img width="1440" height="900" alt="Spending Breakdown" src="https://github.com/user-attachments/assets/306b5a76-1735-4258-9783-a027b3738ef7" />
+  <br /><em>Spending Breakdown</em>
+</p>
+
+<p align="center">
+  <img width="1440" height="900" alt="Taxes Screen" src="https://github.com/user-attachments/assets/03736f44-5c84-42bb-8ad5-7d96d91f1643" />
+  <br /><em>Taxes Screen</em>
+</p>
 
 ## Architecture
 
